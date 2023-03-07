@@ -6,7 +6,6 @@
  */
 
 import React, {useState} from 'react';
-
 import {
   StyleSheet,
   Text,
@@ -14,7 +13,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-
+import Icon from 'react-native-vector-icons/Feather';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 function App(): JSX.Element {
@@ -34,23 +33,31 @@ function App(): JSX.Element {
   const onPress = () => setCount(count + 1);
   return (
     <View style={backgroundStyle}>
-      {/* eslint-disable-next-line react-native/no-inline-styles */}
-      <View style={{flex: 0.8, alignItems: 'center'}}>
-        <Text
-          style={{
-            color: isDarkMode ? Colors.lighter : Colors.black,
-            fontSize: 50,
-          }}>
-          Calculator
-        </Text>
-      </View>
-      <View style={{flex: 3.5}}>
+      <View style={{flex: 4.2}}>
         <Text
           style={{
             color: isDarkMode ? Colors.lighter : Colors.black,
           }}>
           {count}
         </Text>
+      </View>
+      <View
+        style={{
+          backgroundColor: isDarkMode ? Colors.black : Colors.lighter,
+          marginBottom: 5,
+          marginHorizontal: 10,
+        }}>
+        <View
+          style={[
+            {
+              height: 0,
+              borderTopWidth: 0.5,
+              borderColor: 'black',
+              opacity: 0.3,
+              margin: StyleSheet.hairlineWidth,
+            },
+          ]}
+        />
       </View>
       <View
         style={[
