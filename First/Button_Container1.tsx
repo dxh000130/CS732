@@ -25,7 +25,7 @@ function Button_Container1({
       ]}>
       <TouchableOpacity
         style={[styles.Operation_Button, operation_button_color]}
-        onPress={onPress}>
+        onPress={() => onPress('AC')}>
         <View>
           <Text
             style={[
@@ -38,7 +38,7 @@ function Button_Container1({
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.Operation_Button, operation_button_color]}
-        onPress={onPress}>
+        onPress={() => onPress('(')}>
         <View>
           <Text
             style={[
@@ -51,7 +51,7 @@ function Button_Container1({
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.Operation_Button, operation_button_color]}
-        onPress={onPress}>
+        onPress={() => onPress(')')}>
         <View>
           <Text
             style={[
@@ -64,7 +64,7 @@ function Button_Container1({
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.Operation_Button, operation_button_color]}
-        onPress={onPress}>
+        onPress={() => onPress('+')}>
         <View>
           <Text
             style={[

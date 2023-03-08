@@ -28,21 +28,21 @@ function Button_Container5({
       ]}>
       <TouchableOpacity
         style={[styles.Operation_Button, operation_button_color, {width: 176}]}
-        onPress={onPress}>
+        onPress={() => onPress('0')}>
         <View>
           <Text style={[styles.Button_Font, Button_Font_Color]}>0</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.Operation_Button, operation_button_color]}
-        onPress={onPress}>
+        onPress={() => onPress('.')}>
         <View>
           <Text style={[styles.Button_Font, Button_Font_Color]}>.</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity
         style={[styles.Operation_Button, {backgroundColor: 'rgb(0 205 102)'}]}
-        onPress={onPress}>
+        onPress={() => onPress('=')}>
         <View>
           <Text
             style={[[styles.Button_Font, Button_Font_Color], {color: 'white'}]}>
