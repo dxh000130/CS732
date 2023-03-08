@@ -26,6 +26,8 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.black : Colors.lighter,
     flex: 1,
   };
+  const [LeftKuoHao, SetLeftKuoHao] = useState(0);
+  const [RightKuoHao, SetRightKuoHao] = useState(0);
   const [Num1, SetNum1] = useState('');
   const [Num2, SetNum2] = useState('');
   const [Operation, SetOperation] = useState('');
@@ -33,27 +35,25 @@ function App(): JSX.Element {
   const [Input, setInput] = useState('');
   // @ts-ignore
   const Calcuate = equal => {
-    var result = 0;
-    if (Operation === '+') {
-      result = parseFloat(Num1) + parseFloat(Num2);
-    } else if (Operation === '-') {
-      result = parseFloat(Num1) - parseFloat(Num2);
-    } else if (Operation === 'x') {
-      result = parseFloat(Num1) * parseFloat(Num2);
-    } else if (Operation === '÷') {
-      result = parseFloat(Num1) / parseFloat(Num2);
-    }
-    if (Operation !== '') {
-      setCount(result);
-      SetNum1(result + '');
-      SetNum2('');
-      console.log(equal);
-    }
-    if (equal === true && Operation !== '') {
-      console.log(111);
-      setInput(Input + '=' + result);
-      SetNum1(result + '');
-      SetOperation('');
+    if (LeftKuoHao === RightKuoHao) {
+      var result = 0;
+      try {
+        result = eval(Input.replace(/x/, '*').replace(/÷/, '/'));
+      } catch (error) {
+        setInput('Error');
+      }
+      if (Operation !== '') {
+        setCount(result);
+        SetNum1(result + '');
+        SetNum2('');
+        console.log(equal);
+      }
+      if (equal === true && Operation !== '') {
+        console.log(111);
+        setInput(Input + '=' + result);
+        SetNum1(result + '');
+        SetOperation('');
+      }
     }
   };
   // @ts-ignore
@@ -65,16 +65,16 @@ function App(): JSX.Element {
       SetNum2('');
       SetOperation('');
     } else if (value === '(') {
+      SetLeftKuoHao(LeftKuoHao + 1);
       setInput(Input + '(');
     } else if (value === ')') {
+      SetRightKuoHao(RightKuoHao + 1);
       setInput(Input + ')');
     } else if (value === '+') {
       setInput(Input + '+');
       {
         Operation === '' ? SetOperation(value) : Calcuate(false);
       }
-      console.log('Num1', Num1);
-      console.log('Num2', Num2);
     } else if (value === '-') {
       setInput(Input + '-');
       {
