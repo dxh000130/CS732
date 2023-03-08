@@ -43,11 +43,13 @@ function App(): JSX.Element {
     } else if (Operation === '÷') {
       result = parseFloat(Num1) / parseFloat(Num2);
     }
-    setCount(result);
-    SetNum1(result + '');
-    SetNum2('');
-    console.log(equal);
-    if (equal === true) {
+    if (Operation !== '') {
+      setCount(result);
+      SetNum1(result + '');
+      SetNum2('');
+      console.log(equal);
+    }
+    if (equal === true && Operation !== '') {
       console.log(111);
       setInput(Input + '=' + result);
       SetNum1(result + '');
