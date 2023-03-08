@@ -18,7 +18,7 @@ function Delete_Button_set({
         marginBottom: 5,
         marginHorizontal: 10,
       }}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={() => onPress('DEL')}>
         <View style={{alignItems: 'flex-end', marginBottom: 8, marginRight: 8}}>
           <Icon name="delete" size={30} color="rgb(17,154,89)" />
         </View>

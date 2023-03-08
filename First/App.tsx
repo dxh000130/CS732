@@ -28,31 +28,32 @@ function App(): JSX.Element {
   };
   const [LeftKuoHao, SetLeftKuoHao] = useState(0);
   const [RightKuoHao, SetRightKuoHao] = useState(0);
-  const [Num1, SetNum1] = useState('');
-  const [Num2, SetNum2] = useState('');
+  // const [Num1, SetNum1] = useState('');
+  // const [Num2, SetNum2] = useState('');
   const [Operation, SetOperation] = useState('');
   const [count, setCount] = useState(0);
   const [Input, setInput] = useState('');
   // @ts-ignore
   const Calcuate = equal => {
-    if (LeftKuoHao === RightKuoHao) {
+    if (
+      LeftKuoHao === RightKuoHao &&
+      (Operation.indexOf('+') !== -1 ||
+        Operation.indexOf('-') !== -1 ||
+        Operation.indexOf('*') !== -1 ||
+        Operation.indexOf('/') !== -1 ||
+        Operation.indexOf('=') !== -1)
+    ) {
       var result = 0;
       try {
-        result = eval(Input.replace(/x/, '*').replace(/÷/, '/'));
+        result = eval(Operation);
       } catch (error) {
         setInput('Error');
       }
-      if (Operation !== '') {
-        setCount(result);
-        SetNum1(result + '');
-        SetNum2('');
-        console.log(equal);
-      }
-      if (equal === true && Operation !== '') {
-        console.log(111);
+      setCount(result);
+      if (equal === true) {
+        SetOperation('' + result);
         setInput(Input + '=' + result);
-        SetNum1(result + '');
-        SetOperation('');
+        console.log('dfdfd', Operation);
       }
     }
   };
@@ -61,92 +62,55 @@ function App(): JSX.Element {
     if (value === 'AC') {
       setInput('');
       setCount(0);
-      SetNum1('');
-      SetNum2('');
       SetOperation('');
+    } else if (value === 'DEL') {
+      console.log(Input.substring(Input.length - 1));
+      if (Input.match('=\\d*$') === null) {
+        if (Input.substring(Input.length - 1) === '(') {
+          console.log('删除left（');
+          SetLeftKuoHao(LeftKuoHao - 1);
+        } else if (Input.substring(Input.length - 1) === ')') {
+          console.log('删除Right（');
+          SetRightKuoHao(RightKuoHao - 1);
+        }
+        setInput(Input.substring(0, Input.length - 1));
+        SetOperation(Operation.substring(0, Input.length - 1));
+      } else {
+        setInput('');
+        SetOperation('');
+        setCount(0);
+      }
     } else if (value === '(') {
       SetLeftKuoHao(LeftKuoHao + 1);
       setInput(Input + '(');
+      SetOperation(Operation + value);
+      Calcuate(false);
     } else if (value === ')') {
       SetRightKuoHao(RightKuoHao + 1);
       setInput(Input + ')');
-    } else if (value === '+') {
-      setInput(Input + '+');
-      {
-        Operation === '' ? SetOperation(value) : Calcuate(false);
-      }
-    } else if (value === '-') {
-      setInput(Input + '-');
-      {
-        Operation === '' ? SetOperation(value) : Calcuate(false);
-      }
+      SetOperation(Operation + value);
+      Calcuate(false);
     } else if (value === 'x') {
       setInput(Input + 'x');
-      {
-        Operation === '' ? SetOperation(value) : Calcuate(false);
-      }
+      SetOperation(Operation + '*');
+      Calcuate(false);
     } else if (value === '÷') {
       setInput(Input + '÷');
-      {
-        Operation === '' ? SetOperation(value) : Calcuate(false);
-      }
+      SetOperation(Operation + '/');
+      Calcuate(false);
     } else if (value === '=') {
       Calcuate(true);
-    } else if (value === '1') {
-      setInput(Input + '1');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
-    } else if (value === '2') {
-      setInput(Input + '2');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
-    } else if (value === '3') {
-      setInput(Input + '3');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
-    } else if (value === '4') {
-      setInput(Input + '4');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
-    } else if (value === '5') {
-      setInput(Input + '5');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
-    } else if (value === '6') {
-      setInput(Input + '6');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
-    } else if (value === '7') {
-      setInput(Input + '7');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
-    } else if (value === '8') {
-      setInput(Input + '8');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
-    } else if (value === '9') {
-      setInput(Input + '9');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
-    } else if (value === '0') {
-      setInput(Input + '0');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
-    } else if (value === '.') {
-      setInput(Input + '.');
-      {
-        Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
-      }
+      //SetOperation(Operation + value);
+    } else if (value === '+' || value === '-') {
+      setInput(Input + value);
+      SetOperation(Operation + value);
+      Calcuate(false);
+    } else {
+      setInput(Input + value);
+      SetOperation(Operation + value);
+      // {
+      //   Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
+      // }
     }
   };
   const [currentFontSize, setCurrentFontSize] = useState(40);
