@@ -6,7 +6,14 @@
  */
 
 import React, {useState} from 'react';
-import {StyleSheet, useColorScheme, View, Text} from 'react-native';
+import {
+  StyleSheet,
+  useColorScheme,
+  View,
+  Text,
+  TextLayoutEventData,
+  NativeSyntheticEvent,
+} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Button_Container_set from './Button_Container_set';
 import Delete_Button_set from './Delete_Button_set';
@@ -24,6 +31,7 @@ function App(): JSX.Element {
   const [Operation, SetOperation] = useState('');
   const [count, setCount] = useState(0);
   const [Input, setInput] = useState('');
+  // @ts-ignore
   const Calcuate = equal => {
     var result = 0;
     if (Operation === '+') {
@@ -139,10 +147,19 @@ function App(): JSX.Element {
       }
     }
   };
+  const [currentFontSize, setCurrentFontSize] = useState(40);
+  const onTextLayout = (e: NativeSyntheticEvent<TextLayoutEventData>) => {
+    const {lines} = e.nativeEvent;
+    if (lines.length > 3) {
+      setCurrentFontSize(currentFontSize - 0.5);
+    }
+  };
   return (
     <View style={backgroundStyle}>
       <View style={{flex: 2.5, alignItems: 'flex-end'}}>
-        <Text style={{fontSize: 40, marginTop: 50, marginRight: 20}}>
+        <Text
+          style={{fontSize: currentFontSize, marginTop: 50, marginRight: 20}}
+          onTextLayout={onTextLayout}>
           {Input}
         </Text>
       </View>
