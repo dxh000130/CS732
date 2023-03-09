@@ -147,9 +147,9 @@ const styles = StyleSheet.create({
   Button_Container: {
     flex: 1.2,
     flexDirection: 'row',
-    marginLeft: 8,
-    marginRight: 8,
-    alignItems: 'flex-start',
+    marginLeft: 3,
+    marginRight: 3,
+    alignItems: 'center',
   },
   Operation_Button: {
     marginLeft: 9,
