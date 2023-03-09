@@ -5,110 +5,162 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, {useState} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
   useColorScheme,
   View,
+  Text,
+  TextLayoutEventData,
+  NativeSyntheticEvent,
 } from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import Button_Container_set from './Button_Container_set';
+import Delete_Button_set from './Delete_Button_set';
+import Result_Line from './Result_Line';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? Colors.black : Colors.lighter,
+    flex: 1,
   };
-
+  const [LeftKuoHao, SetLeftKuoHao] = useState(0);
+  const [RightKuoHao, SetRightKuoHao] = useState(0);
+  // const [Num1, SetNum1] = useState('');
+  // const [Num2, SetNum2] = useState('');
+  const [Operation, SetOperation] = useState('');
+  const [count, setCount] = useState(0);
+  const [Input, setInput] = useState('');
+  // @ts-ignore
+  const Calcuate = equal => {
+    if (
+      LeftKuoHao === RightKuoHao &&
+      (Operation.indexOf('+') !== -1 ||
+        Operation.indexOf('-') !== -1 ||
+        Operation.indexOf('*') !== -1 ||
+        Operation.indexOf('/') !== -1 ||
+        Operation.indexOf('=') !== -1)
+    ) {
+      var result = 0;
+      try {
+        result = eval(Operation);
+      } catch (error) {
+        setInput('Error');
+      }
+      setCount(parseFloat(result.toFixed(8)));
+      if (equal === true) {
+        SetOperation('' + result);
+        setInput(Input + '=' + result);
+        console.log('dfdfd', Operation);
+      }
+    }
+  };
+  // @ts-ignore
+  const onPress = value => {
+    if (value === 'AC') {
+      setInput('');
+      setCount(0);
+      SetOperation('');
+    } else if (value === 'DEL') {
+      console.log(Input.substring(Input.length - 1));
+      if (Input.match('=\\d*$') === null) {
+        if (Input.substring(Input.length - 1) === '(') {
+          console.log('删除left（');
+          SetLeftKuoHao(LeftKuoHao - 1);
+        } else if (Input.substring(Input.length - 1) === ')') {
+          console.log('删除Right（');
+          SetRightKuoHao(RightKuoHao - 1);
+        }
+        setInput(Input.substring(0, Input.length - 1));
+        SetOperation(Operation.substring(0, Input.length - 1));
+      } else {
+        setInput('');
+        SetOperation('');
+        setCount(0);
+      }
+    } else if (value === '(') {
+      SetLeftKuoHao(LeftKuoHao + 1);
+      setInput(Input + '(');
+      SetOperation(Operation + value);
+      Calcuate(false);
+    } else if (value === ')') {
+      SetRightKuoHao(RightKuoHao + 1);
+      setInput(Input + ')');
+      SetOperation(Operation + value);
+      Calcuate(false);
+    } else if (value === 'x') {
+      setInput(Input + 'x');
+      SetOperation(Operation + '*');
+      Calcuate(false);
+    } else if (value === '÷') {
+      setInput(Input + '÷');
+      SetOperation(Operation + '/');
+      Calcuate(false);
+    } else if (value === '=') {
+      Calcuate(true);
+      //SetOperation(Operation + value);
+    } else if (value === '+' || value === '-') {
+      setInput(Input + value);
+      SetOperation(Operation + value);
+      Calcuate(false);
+    } else {
+      setInput(Input + value);
+      SetOperation(Operation + value);
+      // {
+      //   Operation === '' ? SetNum1(Num1 + value) : SetNum2(Num2 + value);
+      // }
+    }
+  };
+  const [currentFontSize, setCurrentFontSize] = useState(40);
+  const onTextLayout = (e: NativeSyntheticEvent<TextLayoutEventData>) => {
+    const {lines} = e.nativeEvent;
+    if (lines.length > 3) {
+      setCurrentFontSize(currentFontSize - 0.5);
+    }
+  };
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <View style={backgroundStyle}>
+      <View style={{flex: 2.5, alignItems: 'flex-end'}}>
+        <Text
+          style={{fontSize: currentFontSize, marginTop: 50, marginRight: 20}}
+          onTextLayout={onTextLayout}>
+          {Input}
+        </Text>
+      </View>
+      <Result_Line isDarkMode={isDarkMode} count={count} />
+      <Delete_Button_set onPress={onPress} isDarkMode={isDarkMode} />
+      <Button_Container_set
+        styles={styles}
+        onPress={onPress}
+        isDarkMode={isDarkMode}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  Button_Font: {
+    fontSize: 30,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  Button_Container: {
+    flex: 1.2,
+    flexDirection: 'row',
+    marginLeft: 3,
+    marginRight: 3,
+    alignItems: 'center',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  Operation_Button: {
+    marginLeft: 9,
+    marginRight: 8,
+    width: 80,
+    height: 80,
+    marginTop: 3,
+    borderRadius: 160,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgb(232 232 232)',
   },
   highlight: {
     fontWeight: '700',
