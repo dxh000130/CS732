@@ -49,7 +49,7 @@ function App(): JSX.Element {
       } catch (error) {
         setInput('Error');
       }
-      setCount(result);
+      setCount(parseFloat(result.toFixed(8)));
       if (equal === true) {
         SetOperation('' + result);
         setInput(Input + '=' + result);
