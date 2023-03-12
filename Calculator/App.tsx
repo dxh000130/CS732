@@ -26,8 +26,8 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.black : Colors.lighter,
     flex: 1,
   };
-  const [LeftKuoHao, SetLeftKuoHao] = useState(0);
-  const [RightKuoHao, SetRightKuoHao] = useState(0);
+  const [Leftbrackets, SetLeftbrackets] = useState(0);
+  const [Rightbrackets, SetRightbrackets] = useState(0);
   // const [Num1, SetNum1] = useState('');
   // const [Num2, SetNum2] = useState('');
   const [Operation, SetOperation] = useState('');
@@ -36,7 +36,7 @@ function App(): JSX.Element {
   // @ts-ignore
   const Calcuate = equal => {
     if (
-      LeftKuoHao === RightKuoHao &&
+      Leftbrackets === Rightbrackets &&
       (Operation.indexOf('+') !== -1 ||
         Operation.indexOf('-') !== -1 ||
         Operation.indexOf('*') !== -1 ||
@@ -63,15 +63,16 @@ function App(): JSX.Element {
       setInput('');
       setCount(0);
       SetOperation('');
+      setCurrentFontSize(40);
     } else if (value === 'DEL') {
       console.log(Input.substring(Input.length - 1));
       if (Input.match('=\\d*$') === null) {
         if (Input.substring(Input.length - 1) === '(') {
           console.log('删除left（');
-          SetLeftKuoHao(LeftKuoHao - 1);
+          SetLeftbrackets(Leftbrackets - 1);
         } else if (Input.substring(Input.length - 1) === ')') {
           console.log('删除Right（');
-          SetRightKuoHao(RightKuoHao - 1);
+          SetRightbrackets(Rightbrackets - 1);
         }
         setInput(Input.substring(0, Input.length - 1));
         SetOperation(Operation.substring(0, Input.length - 1));
@@ -81,12 +82,12 @@ function App(): JSX.Element {
         setCount(0);
       }
     } else if (value === '(') {
-      SetLeftKuoHao(LeftKuoHao + 1);
+      SetLeftbrackets(Leftbrackets + 1);
       setInput(Input + '(');
       SetOperation(Operation + value);
       Calcuate(false);
     } else if (value === ')') {
-      SetRightKuoHao(RightKuoHao + 1);
+      SetRightbrackets(Rightbrackets + 1);
       setInput(Input + ')');
       SetOperation(Operation + value);
       Calcuate(false);
