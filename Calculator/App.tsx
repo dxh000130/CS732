@@ -125,7 +125,7 @@ function App(): JSX.Element {
     <View style={backgroundStyle}>
       <View style={{flex: 2.5, alignItems: 'flex-end'}}>
         <Text
-          style={{fontSize: currentFontSize, marginTop: 50, marginRight: 20}}
+          style={{fontSize: currentFontSize, marginTop: 50, marginRight: 20, color: isDarkMode ? Colors.lighter : Colors.black}}
           onTextLayout={onTextLayout}>
           {Input}
         </Text>
